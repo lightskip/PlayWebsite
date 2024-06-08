@@ -1,0 +1,151 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Vier Gewinnt</title>
+    <style type="text/css">
+        /* Hier kannst du deine CSS-Stile definieren */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .board {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+        }
+        .cell {
+            width: 80px;
+            height: 80px;
+            background-color: #ccc;
+            border: 1px solid #aaa;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Vier Gewinnt</h1>
+        <div class="board" id="board">
+            <!-- Create the board cells dynamically -->
+        </div>
+        <button onclick="resetGame()">Neues Spiel</button>
+        <p id="message"></p>
+    </div>
+
+    <script type="text/javascript">
+        //<![CDATA[
+        // Constants
+        const ROWS = 6;
+        const COLS = 7;
+        const EMPTY = "";
+        const PLAYER_1 = "red";
+        const PLAYER_2 = "yellow";
+        const WINNING_LENGTH = 4;
+
+        // Variables
+        let board = [];
+        let currentPlayer = PLAYER_1;
+        let gameEnded = false;
+
+        // Create the game board
+        const boardElement = document.getElementById("board");
+        for (let row = 0; row < ROWS; row++) {
+            board[row] = [];
+            for (let col = 0; col < COLS; col++) {
+                const cell = document.createElement("div");
+                cell.className = "cell";
+                cell.dataset.row = row;
+                cell.dataset.col = col;
+                cell.addEventListener("click", () => dropPiece(col));
+                boardElement.appendChild(cell);
+                board[row][col] = EMPTY;
+            }
+        }
+
+        // Function to drop a piece into the board
+        function dropPiece(col) {
+            if (gameEnded) return;
+
+            for (let row = ROWS - 1; row >= 0; row--) {
+                if (board[row][col] === EMPTY) {
+                    board[row][col] = currentPlayer;
+                    const cell = document.querySelector(`.cell[data-row='${row}'][data-col='${col}']`);
+                    cell.style.backgroundColor = currentPlayer;
+                    if (checkWin(row, col)) {
+                        document.getElementById("message").innerText = `Spieler ${currentPlayer === PLAYER_1 ? 1 : 2} hat gewonnen!`;
+                        gameEnded = true;
+                    } else if (checkDraw()) {
+                        document.getElementById("message").innerText = "Unentschieden!";
+                        gameEnded = true;
+                    } else {
+                        currentPlayer = currentPlayer === PLAYER_1 ? PLAYER_2 : PLAYER_1;
+                    }
+                    break;
+                }
+            }
+        }
+
+        // Function to check for a win
+        function checkWin(row, col) {
+            const directions = [
+                [0, 1], [1, 0], [1, 1], [1, -1] // horizontal, vertical, diagonal up-right, diagonal up-left
+            ];
+
+            for (let [dRow, dCol] of directions) {
+                let count = 1;
+                count += countInDirection(row, col, dRow, dCol);
+                count += countInDirection(row, col, -dRow, -dCol);
+
+                if (count >= WINNING_LENGTH) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        // Function to count consecutive pieces in a direction
+        function countInDirection(row, col, dRow, dCol) {
+            let count = 0;
+            let r = row + dRow;
+            let c = col + dCol;
+            while (r >= 0 && r < ROWS && c >= 0 && c < COLS && board[r][c] === currentPlayer) {
+                count++;
+                r += dRow;
+                c += dCol;
+            }
+            return count;
+        }
+
+        // Function to check for a draw
+        function checkDraw() {
+            return board.every(row => row.every(cell => cell !== EMPTY));
+        }
+
+        // Function to reset the game
+        function resetGame() {
+            board.forEach(row => row.fill(EMPTY));
+            const cells = document.querySelectorAll(".cell");
+            cells.forEach(cell => {
+                cell.style.backgroundColor = "#ccc";
+            });
+            gameEnded = false;
+            currentPlayer = PLAYER_1;
+            document.getElementById("message").innerText = "";
+        }
+        //]]>
+    </script>
+</body>
+</html>

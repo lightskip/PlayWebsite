@@ -1,0 +1,131 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Tic Tac Toe</title>
+    <style type="text/css">
+        /* Hier kannst du deine CSS-Stile definieren */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 300px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .board {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-gap: 2px;
+        }
+        .cell {
+            background-color: #ccc;
+            border: 1px solid #aaa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        /* Weitere Stile für das Tic Tac Toe-Spiel können hier definiert werden */
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Tic Tac Toe</h1>
+        <div class="board" id="board">
+            <div class="cell" onclick="makeMove(0, 0)"></div>
+            <div class="cell" onclick="makeMove(0, 1)"></div>
+            <div class="cell" onclick="makeMove(0, 2)"></div>
+            <div class="cell" onclick="makeMove(1, 0)"></div>
+            <div class="cell" onclick="makeMove(1, 1)"></div>
+            <div class="cell" onclick="makeMove(1, 2)"></div>
+            <div class="cell" onclick="makeMove(2, 0)"></div>
+            <div class="cell" onclick="makeMove(2, 1)"></div>
+            <div class="cell" onclick="makeMove(2, 2)"></div>
+        </div>
+        <button onclick="resetGame()">Spiel zurücksetzen</button>
+        <p id="message"></p>
+    </div>
+
+    <script type="text/javascript">
+        //<![CDATA[
+        // JavaScript-Code für das Tic Tac Toe-Spiel
+        var board = [
+            ["", "", ""],
+            ["", "", ""],
+            ["", "", ""]
+        ];
+
+        var currentPlayer = "X";
+        var gameEnded = false;
+
+        function makeMove(row, col) {
+            if (gameEnded || board[row][col] !== "") return;
+
+            board[row][col] = currentPlayer;
+            document.getElementById("board").children[row * 3 + col].innerText = currentPlayer;
+
+            if (checkWinner(currentPlayer)) {
+                document.getElementById("message").innerText = "Spieler " + currentPlayer + " hat gewonnen!";
+                gameEnded = true;
+                return;
+            }
+
+            if (checkDraw()) {
+                document.getElementById("message").innerText = "Unentschieden!";
+                gameEnded = true;
+                return;
+            }
+
+            currentPlayer = currentPlayer === "X" ? "O" : "X";
+        }
+
+        function checkWinner(player) {
+            for (var i = 0; i < 3; i++) {
+                if (board[i][0] === player && board[i][1] === player && board[i][2] === player) return true;
+                if (board[0][i] === player && board[1][i] === player && board[2][i] === player) return true;
+            }
+            if (board[0][0] === player && board[1][1] === player && board[2][2] === player) return true;
+            if (board[0][2] === player && board[1][1] === player && board[2][0] === player) return true;
+            return false;
+        }
+
+        function checkDraw() {
+            for (var i = 0; i < 3; i++) {
+                for (var j = 0; j < 3; j++) {
+                    if (board[i][j] === "") return false;
+                }
+            }
+            return true;
+        }
+
+        function resetGame() {
+            board = [
+                ["", "", ""],
+                ["", "", ""],
+                ["", "", ""]
+            ];
+            currentPlayer = "X";
+            gameEnded = false;
+            document.getElementById("message").innerText = "";
+            var cells = document.querySelectorAll(".cell");
+            cells.forEach(function(cell) {
+                cell.innerText = "";
+            });
+        }
+        //]]>
+    </script>
+</body>
+</html>

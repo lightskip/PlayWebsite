@@ -1,0 +1,25 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="de" xml:lang="de">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Würfel-Website</title>
+    <script type="text/javascript">
+        function wurfeln() {
+            // Generiere eine zufällige Zahl zwischen 1 und 6
+            var zufallszahl = Math.floor(Math.random() * 6) + 1;
+            // Zeige die gewürfelte Zahl an
+            document.getElementById('ergebnis').innerHTML = 'Gewürfelte Zahl: ' + zufallszahl;
+        }
+    </script>
+</head>
+<body>
+    <h1>Willkommen auf der Würfel-Website</h1>
+    <p>Dies ist eine einfache Website, auf der du einen virtuellen Würfel werfen kannst.</p>
+    <p>Ein Würfel ist ein geometrischer Körper mit sechs Seiten. Jede Seite ist mit einer Zahl von 1 bis 6 beschriftet.</p>
+    <p>Um zu würfeln, klicke einfach auf den Knopf "Würfeln" unten:</p>
+    <button onclick="wurfeln()">Würfeln</button>
+    <div id="ergebnis"></div>
+</body>
+</html>
+

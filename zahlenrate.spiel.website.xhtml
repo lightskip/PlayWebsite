@@ -1,0 +1,66 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Zahlenratespiel</title>
+    <style type="text/css">
+        /* Hier kannst du deine CSS-Stile definieren */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        /* Weitere Stile für das Spiel können hier definiert werden */
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Zahlenratespiel</h1>
+        <p>Errate die Zahl zwischen 1 und 100:</p>
+        <input type="text" id="guessInput" />
+        <button onclick="checkGuess()">Raten</button>
+        <p id="message"></p>
+    </div>
+
+    <script type="text/javascript">
+        //<![CDATA[
+        // JavaScript-Code für das Zahlenratespiel
+        var randomNumber = Math.floor(Math.random() * 100) + 1;
+        var attempts = 0;
+
+        function checkGuess() {
+            var guess = parseInt(document.getElementById("guessInput").value);
+            if (isNaN(guess) || guess < 1 || guess > 100) {
+                document.getElementById("message").innerHTML = "Bitte gib eine Zahl zwischen 1 und 100 ein.";
+                return;
+            }
+
+            attempts++;
+
+            if (guess === randomNumber) {
+                document.getElementById("message").innerHTML = "Herzlichen Glückwunsch! Du hast die Zahl " + randomNumber + " erraten. Du hast " + attempts + " Versuche gebraucht.";
+            } else if (guess < randomNumber) {
+                document.getElementById("message").innerHTML = "Die gesuchte Zahl ist größer als " + guess + ". Versuche es erneut.";
+            } else {
+                document.getElementById("message").innerHTML = "Die gesuchte Zahl ist kleiner als " + guess + ". Versuche es erneut.";
+            }
+        }
+        //]]>
+    </script>
+</body>
+</html>
